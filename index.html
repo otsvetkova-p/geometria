@@ -1,0 +1,607 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Геометрия за I четверть</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Golos+Text:wght@400;500;600;700&family=PT+Serif:ital,wght@1,400;1,700&display=swap">
+<style>
+:root{
+  --paper:#f4f6fa; --sheet:#ffffff; --grid:#e2e8f2; --ink:#1b2540; --ink-2:#56627e;
+  --pen:#2447c7; --pen-soft:#e7ecfb; --red:#c4382c; --red-soft:#fbeae8;
+  --green:#1d8551; --green-soft:#e3f3e9; --line:#d6ddeb;
+  --sans:'Golos Text',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --serif:'PT Serif',Georgia,'Times New Roman',serif;
+  --hand:'Caveat','Comic Sans MS',cursive;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --paper:#0f131b; --sheet:#171d29; --grid:#1c2332; --ink:#e4e9f4; --ink-2:#9ba7c1;
+    --pen:#8aa5ff; --pen-soft:#1f2946; --red:#ff8a7c; --red-soft:#3a201e;
+    --green:#62d497; --green-soft:#15301f; --line:#2a3347;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --paper:#0f131b; --sheet:#171d29; --grid:#1c2332; --ink:#e4e9f4; --ink-2:#9ba7c1;
+  --pen:#8aa5ff; --pen-soft:#1f2946; --red:#ff8a7c; --red-soft:#3a201e;
+  --green:#62d497; --green-soft:#15301f; --line:#2a3347;
+}
+*{box-sizing:border-box}
+body{
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:20px 20px;
+  color:var(--ink); font-family:var(--sans); font-size:16px; line-height:1.55;
+}
+.wrap{max-width:820px;margin:0 auto;padding-inline:16px;padding-block:28px 64px}
+h1,h2,h3{text-wrap:balance;line-height:1.2;margin:0}
+.top{display:grid;gap:14px;margin-bottom:18px}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);font-weight:600}
+h1{font-size:clamp(28px,5vw,40px);font-weight:700;letter-spacing:-.01em}
+h1 em{font-family:var(--serif);font-weight:400;color:var(--pen)}
+.lede{color:var(--ink-2);max-width:62ch;margin:0}
+.score{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center;background:var(--sheet);border:1px solid var(--line);border-radius:10px;padding:12px 16px}
+.score b{font-variant-numeric:tabular-nums;font-size:20px}
+.score span{color:var(--ink-2);font-size:14px}
+.bar{flex:1 1 160px;height:8px;background:var(--pen-soft);border-radius:99px;overflow:hidden;min-width:120px}
+.bar i{display:block;height:100%;background:var(--pen);border-radius:99px;transition:width .3s}
+
+nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);padding-block:10px;margin-bottom:8px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:thin;border-bottom:1px solid var(--line)}
+.tab{flex:0 0 auto;font:inherit;font-size:14px;font-weight:500;border:1px solid var(--line);background:var(--sheet);color:var(--ink);border-radius:8px;padding:7px 12px;cursor:pointer;display:flex;gap:8px;align-items:center}
+.tab small{font-variant-numeric:tabular-nums;color:var(--ink-2);font-size:12px}
+.tab[aria-selected="true"]{background:var(--pen);border-color:var(--pen);color:var(--sheet)}
+.tab[aria-selected="true"] small{color:var(--sheet);opacity:.85}
+.tab:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--pen);outline-offset:2px}
+
+.panel{display:grid;gap:18px;padding-top:10px}
+.phead{display:grid;gap:6px}
+.phead h2{font-size:26px}
+.phead p{margin:0;color:var(--ink-2);max-width:64ch}
+.note{font-size:14px;color:var(--ink-2);border-left:3px solid var(--line);padding-left:10px;margin:0}
+
+.konspekt{background:var(--sheet);border:1px solid var(--line);border-radius:10px;padding:18px 20px;display:grid;gap:14px}
+.konspekt>h3{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--pen)}
+.rule{display:grid;grid-template-columns:minmax(0,1fr);gap:4px;padding-bottom:14px;border-bottom:1px dashed var(--line)}
+.rule:last-child{border-bottom:0;padding-bottom:0}
+.rule h4{margin:0;font-size:16px}
+.rule p{margin:0;max-width:66ch}
+.rule .key{background:var(--pen-soft);border-radius:6px;padding:8px 12px;font-weight:500}
+.rule-fig{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:flex-start}
+.rule-fig>div{flex:1 1 260px;min-width:0}
+
+.qs-title{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:6px}
+.qs-title h3{font-size:20px}
+.linkbtn{font:inherit;font-size:13px;background:none;border:0;color:var(--ink-2);text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:4px}
+
+.q{background:var(--sheet);border:1px solid var(--line);border-radius:10px;padding:16px 18px;display:grid;gap:12px;position:relative}
+.q.is-ok{border-color:var(--green)}
+.qhead{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.qn{font-family:var(--serif);font-style:italic;font-weight:700;font-size:18px;color:var(--pen);font-variant-numeric:tabular-nums}
+.tag{font-size:11px;letter-spacing:.07em;text-transform:uppercase;font-weight:600;color:var(--ink-2);border:1px solid var(--line);border-radius:99px;padding:2px 8px}
+.mark{margin-left:auto;font-family:var(--hand);font-size:22px;line-height:1;font-weight:700}
+.mark.ok{color:var(--green)} .mark.bad{color:var(--red)}
+.qt{margin:0;font-size:17px;max-width:64ch}
+.opts{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr))}
+.opt{font:inherit;text-align:left;border:1px solid var(--line);background:var(--sheet);color:var(--ink);border-radius:8px;padding:10px 12px;cursor:pointer;display:flex;gap:10px;align-items:flex-start}
+.opt:hover:not(:disabled){border-color:var(--pen);background:var(--pen-soft)}
+.opt .l{font-weight:700;color:var(--ink-2);min-width:1.2em}
+.opt.ok{border-color:var(--green);background:var(--green-soft)}
+.opt.ok .l{color:var(--green)}
+.opt.bad{border-color:var(--red);background:var(--red-soft);text-decoration:line-through;text-decoration-color:var(--red)}
+.opt:disabled{cursor:default}
+.num{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.num label{font-size:14px;color:var(--ink-2)}
+.num input{font:inherit;font-size:17px;width:9em;max-width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);font-variant-numeric:tabular-nums}
+.num input:disabled{color:var(--green);border-color:var(--green);background:var(--green-soft);font-weight:600}
+.unit{color:var(--ink-2)}
+.btn{font:inherit;font-size:15px;font-weight:600;border:0;border-radius:8px;padding:9px 16px;cursor:pointer;background:var(--pen);color:var(--sheet)}
+.btn.ghost{background:transparent;color:var(--pen);border:1px solid var(--line);font-weight:500;font-size:14px;padding:7px 12px}
+.btn.ghost[aria-pressed="true"]{background:var(--pen-soft);border-color:var(--pen)}
+.acts{display:flex;gap:8px;flex-wrap:wrap}
+.fb{margin:0;font-size:15px}
+.fb.ok{color:var(--green);font-weight:600}
+.fb.bad{color:var(--red)}
+.hint{margin:0;background:var(--pen-soft);border-radius:8px;padding:10px 14px;font-size:15px}
+.hint b{font-family:var(--hand);font-size:21px;color:var(--pen);margin-right:6px;font-weight:700}
+.sol{border-top:1px dashed var(--line);padding-top:10px}
+.sol h4{margin:0 0 6px;font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
+.sol ol{margin:0;padding-left:1.4em;display:grid;gap:4px}
+.sol li{max-width:64ch}
+
+.fig{width:100%;max-width:380px;height:auto;display:block}
+.fig line,.fig path,.fig polyline,.fig polygon{stroke:var(--ink);stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.fig .arc{stroke:var(--pen);stroke-width:1.6}
+.fig .arc2{stroke:var(--red);stroke-width:1.6}
+.fig .tk,.fig .rm{stroke:var(--pen);stroke-width:2}
+.fig .thin{stroke:var(--ink-2);stroke-width:1.2;stroke-dasharray:4 4}
+.fig .dot{fill:var(--ink);stroke:none}
+.fig .circ{stroke:var(--pen);stroke-width:1.6;fill:none}
+.fig .dash{stroke:var(--red);stroke-dasharray:6 5}
+.fig text{dominant-baseline:central;text-anchor:middle}
+.fig .pl{fill:var(--ink);font-family:var(--serif);font-style:italic;font-size:17px}
+.fig .al{fill:var(--pen);font-family:var(--sans);font-size:14px;font-weight:600}
+.fig .qm{fill:var(--red);font-family:var(--sans);font-size:16px;font-weight:700}
+.fig .cap{fill:var(--ink-2);font-family:var(--sans);font-size:13px}
+
+.steps{margin:0;padding:0;list-style:none;display:grid;gap:10px;counter-reset:s}
+.steps li{counter-increment:s;display:grid;grid-template-columns:34px minmax(0,1fr);gap:10px;align-items:start}
+.steps li::before{content:counter(s);font-family:var(--serif);font-style:italic;font-weight:700;font-size:20px;color:var(--pen);line-height:1.3}
+.steps b{display:block}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);font-weight:600}
+td:first-child{white-space:nowrap;font-weight:500}
+.sample{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:12px 16px;display:grid;gap:4px;font-size:15px}
+.sample p{margin:0}
+.sample .lbl{font-weight:700}
+.hand{font-family:var(--hand);font-size:22px;color:var(--pen);font-weight:700}
+.mixres{background:var(--sheet);border:1px solid var(--line);border-radius:10px;padding:14px 18px;display:flex;flex-wrap:wrap;gap:10px 20px;align-items:center;justify-content:space-between}
+.mixres b{font-variant-numeric:tabular-nums}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="eyebrow">7 класс · школы Беларуси · 1-я четверть</div>
+    <h1>Геометрия <em>за первую четверть</em></h1>
+    <p class="lede">Пять тем: конспект с рисунками, задачи от простых к сложным и разбор каждой. Ошибиться не страшно: открой подсказку, попробуй ещё раз, потом прочитай решение. В конце — смешанный тест.</p>
+    <div class="score" id="score"></div>
+  </header>
+  <nav class="tabs" id="tabs" role="tablist" aria-label="Темы"></nav>
+  <main id="main"></main>
+</div>
+
+<script>
+/* ---------- рисунки ---------- */
+const P=(O,d,r)=>{const a=d*Math.PI/180;return [O[0]+r*Math.cos(a),O[1]-r*Math.sin(a)]};
+const ang=(O,Q)=>Math.atan2(-(Q[1]-O[1]),Q[0]-O[0])*180/Math.PI;
+const f=n=>n.toFixed(1);
+const ln=(a,b,c='')=>`<line x1="${f(a[0])}" y1="${f(a[1])}" x2="${f(b[0])}" y2="${f(b[1])}" class="${c}"/>`;
+const dot=p=>`<circle cx="${f(p[0])}" cy="${f(p[1])}" r="3.2" class="dot"/>`;
+const tx=(p,t,c='pl')=>`<text x="${f(p[0])}" y="${f(p[1])}" class="${c}">${t}</text>`;
+function arc(O,r,a1,a2,c='arc'){while(a2<a1)a2+=360;const s=P(O,a1,r),e=P(O,a2,r);return `<path d="M${f(s[0])} ${f(s[1])} A${r} ${r} 0 ${(a2-a1)>180?1:0} 0 ${f(e[0])} ${f(e[1])}" class="${c}"/>`}
+function atx(O,r,a1,a2,t,c='al'){while(a2<a1)a2+=360;return tx(P(O,(a1+a2)/2,r),t,c)}
+function tick(p,q,n=1){const m=[(p[0]+q[0])/2,(p[1]+q[1])/2],L=Math.hypot(q[0]-p[0],q[1]-p[1]),u=[(q[0]-p[0])/L,(q[1]-p[1])/L],v=[-u[1],u[0]];let s='';for(let i=0;i<n;i++){const o=(i-(n-1)/2)*5,c=[m[0]+u[0]*o,m[1]+u[1]*o];s+=ln([c[0]-v[0]*7,c[1]-v[1]*7],[c[0]+v[0]*7,c[1]+v[1]*7],'tk')}return s}
+function rm(O,a,s=12){const p1=P(O,a,s),p3=P(O,a+90,s),p2=[p1[0]+p3[0]-O[0],p1[1]+p3[1]-O[1]];return `<polyline points="${f(p1[0])},${f(p1[1])} ${f(p2[0])},${f(p2[1])} ${f(p3[0])},${f(p3[1])}" class="rm"/>`}
+const svg=(vb,inner,label='Рисунок к задаче')=>`<svg class="fig" viewBox="${vb}" role="img" aria-label="${label}">${inner}</svg>`;
+
+const FIG={
+  seg(){const A=[30,45],C=[210,45],B=[330,45];return svg('0 0 360 80',ln(A,B)+dot(A)+dot(C)+dot(B)+tx([30,68],'A')+tx([210,68],'C')+tx([330,68],'B')+tx([120,26],'7 см','al')+tx([270,26],'5 см','al'))},
+  ang48(){const O=[40,175],A=P(O,0,280),B=P(O,85,160),C=P(O,48,190);return svg('0 0 340 200',ln(O,A)+ln(O,B)+ln(O,C)+arc(O,55,0,48)+atx(O,76,0,48,'48°')+arc(O,95,48,85)+atx(O,115,48,85,'37°')+tx([O[0]-8,O[1]+14],'O')+tx(P(O,-4,290),'A')+tx(P(O,88,172),'B')+tx(P(O,46,205),'C'))},
+  bis34(){const O=[40,175],A=P(O,0,280),B=P(O,68,175),M=P(O,34,210);return svg('0 0 340 200',ln(O,A)+ln(O,B)+ln(O,M)+arc(O,60,0,34)+atx(O,82,0,34,'34°')+arc(O,115,0,68,'arc2')+tx(P(O,55,132),'?','qm')+tx([O[0]-8,O[1]+14],'O')+tx(P(O,-4,290),'A')+tx(P(O,71,186),'B')+tx(P(O,32,224),'M'))},
+  cross38(){const O=[170,100];return svg('0 0 340 200',ln(P(O,0,150),P(O,180,150))+ln(P(O,38,150),P(O,218,150))+arc(O,42,0,38)+atx(O,62,0,38,'38°')+arc(O,30,38,180,'arc2')+atx(O,48,38,180,'?','qm'))},
+  perpK(){const O=[170,110],A=[20,110],B=[320,110],K=P(O,90,95),C=P(O,115,105),D=P(O,295,105);return svg('0 0 340 232',ln(A,B)+ln(O,K)+ln(C,D)+rm(O,0)+arc(O,46,90,115)+atx(O,64,90,115,'25°')+arc(O,36,295,360,'arc2')+atx(O,54,295,360,'?','qm')+tx([22,94],'A')+tx([318,94],'B')+tx(P(O,90,108),'K')+tx(P(O,115,118),'C')+tx(P(O,295,118),'D')+tx([158,124],'O'))},
+  perpBis(){const O=[150,125],A=P(O,90,100),B=P(O,0,120),C=P(O,45,112),E=P(O,270,100);return svg('0 0 300 250',ln(O,A)+ln(O,B)+ln(O,C)+ln(O,E)+rm(O,0)+arc(O,58,0,45)+arc(O,58,45,90)+arc(O,30,270,405,'arc2')+tx(P(O,-22,50),'?','qm')+tx(P(O,90,113),'A')+tx(P(O,0,132),'B')+tx(P(O,45,126),'C')+tx(P(O,270,113),'E')+tx([136,138],'O'))},
+  mid(){const A=[40,40],B=[300,180],C=[60,170],D=[280,50],O=[170,110];return svg('0 0 340 212',ln(A,B)+ln(C,D)+ln(A,C)+ln(B,D)+tick(A,O,1)+tick(O,B,1)+tick(C,O,2)+tick(O,D,2)+arc(O,24,ang(O,A),ang(O,C))+arc(O,24,ang(O,B),ang(O,D))+tx([28,30],'A')+tx([312,192],'B')+tx([46,182],'C')+tx([294,40],'D')+tx(P(O,90,20),'O'))},
+  /* конспект */
+  th1(){const A=[80,35],C=[180,35],B=[280,35],O=[40,90],M=[200,90];return svg('0 0 360 116',ln([10,35],[350,35])+dot(A)+dot(C)+dot(B)+tx([80,56],'A')+tx([180,56],'C')+tx([280,56],'B')+tx([346,20],'a')+ln(O,[345,90])+dot(O)+dot(M)+tx([40,108],'O')+tx([200,108],'M')+tx([280,74],'луч OM','cap'),'Прямая, отрезок, луч')},
+  th2(){const O=[40,150],A=P(O,0,260),B=P(O,70,150),M=P(O,35,190);return svg('0 0 320 170',ln(O,A)+ln(O,B)+ln(O,M,'thin')+arc(O,55,0,35)+arc(O,55,35,70)+tick(P(O,15,55),P(O,19,55),1)+tick(P(O,50,55),P(O,54,55),1)+tx([O[0]-8,O[1]+12],'O')+tx(P(O,-3,272),'A')+tx(P(O,73,162),'B')+tx(P(O,33,204),'M'),'Угол и биссектриса')},
+  th3a(){const O=[170,120];return svg('0 0 340 146',ln([20,120],[320,120])+ln(O,P(O,60,110))+arc(O,36,0,60)+atx(O,54,0,60,'α')+arc(O,26,60,180,'arc2')+tx(P(O,125,62),'180° − α','al')+tx([20,136],'A')+tx([320,136],'B')+tx([170,136],'O')+tx(P(O,60,124),'C'),'Смежные углы')},
+  th3b(){const O=[170,85];return svg('0 0 340 170',ln(P(O,30,150),P(O,210,150))+ln(P(O,150,150),P(O,330,150))+arc(O,32,150,210)+arc(O,32,330,390)+atx(O,50,150,210,'1')+atx(O,50,90,90,'2')+atx(O,50,330,390,'3')+atx(O,50,270,270,'4'),'Вертикальные углы')},
+  th4(){const O=[150,90];return svg('0 0 300 170',ln([20,90],[280,90])+ln([150,10],[150,165])+rm(O,0,14)+tx([276,74],'a')+tx([166,16],'b'),'Перпендикулярные прямые')},
+  th5(){const T=(dx,s)=>{const A=[20+dx,150],B=[90+dx,30],C=[180+dx,150];return ln(A,B)+ln(B,C)+ln(C,A)+tick(A,B,1)+tick(A,C,2)+arc(A,24,ang(A,C),ang(A,B))+tx([A[0]-8,A[1]+12],'A'+s)+tx([B[0],B[1]-14],'B'+s)+tx([C[0]+10,C[1]+12],'C'+s)};return svg('0 0 400 176',T(0,'')+T(205,'₁'),'Первый признак равенства')},
+  /* контрольная 1 */
+  k1a(){const A=[30,150],R=[[0,250,'C'],[14,240,'D'],[27,232,'E'],[45,175,'B']];return svg('0 0 300 175',R.map(r=>ln(A,P(A,r[0],r[1]))+tx(P(A,r[0]+2,r[1]+14),r[2])).join('')+tx([A[0]-8,A[1]+12],'A'))},
+  k1b(){const A=[20,150],B=[170,22],C=[262,150],M=[140,150];return svg('0 0 290 176',ln(A,B)+ln(B,C)+ln(C,A)+ln(B,M,'arc2')+tx([10,160],'A')+tx([170,8],'B')+tx([274,160],'C')+tx([140,168],'M'))},
+  k1c(){const A=[40,160],B=[40,20],C=[180,20],D=[180,160],M=[110,160],K=[400/3,340/3];return svg('0 0 230 186',ln(A,B)+ln(B,C)+ln(C,D)+ln(D,A)+ln(B,D,'arc2')+ln(C,M,'arc')+tx([26,168],'A')+tx([26,14],'B')+tx([194,14],'C')+tx([194,168],'D')+tx([110,177],'M')+tx([K[0]+14,K[1]+4],'K'))},
+  k2a(){const O=[100,95],A=P(O,240,70),B=P(O,300,70);return svg('0 0 200 186',`<circle cx="100" cy="95" r="70" class="circ"/>`+ln(O,A)+ln(O,B)+ln(A,B)+tick(O,A,1)+tick(O,B,1)+tick(A,B,1)+dot(O)+dot(A)+dot(B)+tx([100,78],'O')+tx(P(O,236,86),'A')+tx(P(O,304,86),'B'))},
+  k2b(){const O=[100,95],B=P(O,120,70),C=P(O,60,70),A=P(O,300,70),D=P(O,240,70);return svg('0 0 200 186',`<circle cx="100" cy="95" r="70" class="circ"/>`+ln(B,C,'arc2')+ln(B,A,'arc2')+ln(D,A,'arc2')+tick(B,C,1)+tick(B,O,1)+tick(O,A,1)+tick(D,A,1)+dot(O)+dot(A)+dot(B)+dot(C)+dot(D)+tx([86,100],'O')+tx(P(O,124,84),'B')+tx(P(O,56,84),'C')+tx(P(O,296,84),'A')+tx(P(O,244,84),'D'))},
+  k2c(){const O=[100,95],A=P(O,180,70),D=P(O,0,70),B=P(O,240,70),C=P(O,300,70);return svg('0 0 200 186',`<circle cx="100" cy="95" r="70" class="circ"/>`+ln(A,D)+ln(A,B)+ln(B,C)+ln(C,D)+tick(A,O,1)+tick(O,D,1)+tick(A,B,1)+tick(B,C,1)+tick(C,D,1)+dot(O)+dot(A)+dot(B)+dot(C)+dot(D)+tx([100,80],'O')+tx([18,95],'A')+tx([184,95],'D')+tx(P(O,240,86),'B')+tx(P(O,300,86),'C'))},
+  k3(r1,r2,lb){const O=[150,130];return svg('0 0 300 150',ln([20,130],[280,130])+ln(O,P(O,r1,115),'arc2')+ln(O,P(O,r2,115))+arc(O,26,r1,180)+arc(O,34,r2,r1)+arc(O,26,0,r2)+atx(O,44,r1,180,lb[0],'al')+atx(O,52,r2,r1,lb[1],'al')+atx(O,44,0,r2,lb[2],'al'))},
+  k3a(){return FIG.k3(118,56,['1','3','2'])}, k3b(){return FIG.k3(130,70,['1','2','3'])}, k3c(){return FIG.k3(140,50,['1','3','2'])},
+  k4(o){const O=[160,110];let s='';o.lines.forEach(l=>{s+=ln(P(O,l[0],l[2]||140),P(O,l[1],l[3]||140),l[4]||'')});o.rays.forEach(r=>{s+=ln(O,P(O,r[0],r[1]),r[2]||'')});s+=rm(O,o.rm);o.arcs.forEach(a=>{s+=arc(O,a[3]||26,a[0],a[1])+atx(O,(a[3]||26)+16,a[0],a[1],a[2],'al')});o.lab.forEach(l=>{s+=tx(P(O,l[0],l[1]),l[2])});s+=tx(o.ol||[148,124],'O');return svg('0 0 320 220',s)},
+  k4a(){return FIG.k4({lines:[[180,0],[146,326,120,100,'arc2']],rays:[[56,110]],rm:56,arcs:[[146,180,'2'],[0,56,'1'],[326,360,'3',32]],lab:[[186,145,'A'],[354,145,'B'],[146,134,'E'],[326,114,'D'],[56,124,'C']]})},
+  k4b(){return FIG.k4({lines:[[180,0],[48,228,120,110,'arc2']],rays:[[138,110]],rm:48,arcs:[[138,180,'2'],[0,48,'3'],[180,228,'1']],lab:[[186,145,'A'],[354,145,'B'],[138,124,'C'],[48,134,'D'],[228,124,'E']],ol:[172,124]})},
+  k4c(){return FIG.k4({lines:[[195,15],[160,340,130,120]],rays:[[70,110,'arc2']],rm:70,arcs:[[160,195,'1'],[15,70,'2'],[195,340,'3',22]],lab:[[201,146,'A'],[9,146,'B'],[160,144,'C'],[340,134,'D'],[70,124,'E']],ol:[172,96]})},
+  k5(o){const A=o.A;let s='';o.solid.forEach(r=>{s+=ln(A,P(A,r[0],r[1]),r[3]||'')+tx(P(A,r[0]+(r[4]||0),r[1]+14),r[2])});o.dash.forEach(r=>{s+=ln(A,P(A,r[0],r[1]),'dash')+tx(P(A,r[0],r[1]+14),r[2])});if(o.rm!=null)s+=rm(A,o.rm);s+=tx(o.al||[A[0]-10,A[1]+12],'A');return svg(o.vb||'0 0 300 180',s)},
+  k5a(){return FIG.k5({A:[30,160],solid:[[0,230,'C'],[90,145,'B'],[38,205,'D','arc']],dash:[[19,200,'M'],[64,170,'K']],rm:0})},
+  k5b(){return FIG.k5({A:[150,150],solid:[[0,135,'C'],[180,135,'B'],[80,125,'D','arc']],dash:[[40,125,'M'],[130,120,'K']],al:[150,168],vb:'0 0 300 176'})},
+  k5c(){return FIG.k5({A:[30,160],solid:[[0,230,'C'],[60,195,'B'],[20,220,'D','arc']],dash:[[10,215,'M'],[40,210,'K']]})},
+  kite(){const A=[30,95],B=[150,25],C=[290,95],D=[150,165];return svg('0 0 320 190',ln(A,B)+ln(B,C)+ln(C,D)+ln(D,A)+ln(A,C)+tick(A,B,1)+tick(A,D,1)+arc(A,40,0,ang(A,B))+arc(A,40,ang(A,D),0)+tx([16,95],'A')+tx([150,11],'B')+tx([304,95],'C')+tx([150,180],'D'),'Рисунок к образцу доказательства')}
+};
+
+/* ---------- темы и задачи ---------- */
+const TOPICS=[
+{id:'t1',n:1,title:'Точки, прямые, отрезки',sub:'С чего начинается геометрия: основные фигуры и сложение отрезков.',
+ theory:[
+  {h:'Основное свойство прямой',t:'<p class="key">Через любые две точки проходит прямая, и притом только одна.</p><p>Две различные прямые либо пересекаются (одна общая точка), либо не имеют общих точек.</p>',fig:'th1'},
+  {h:'Отрезок и его длина',t:'<p>Отрезок <i>AB</i> — часть прямой между точками <i>A</i> и <i>B</i>, это его концы.</p><p class="key">Если точка C лежит на отрезке AB, то AB = AC + CB.</p><p>Середина отрезка делит его на две равные части.</p>'},
+  {h:'Луч',t:'<p>Луч — часть прямой: точка (начало луча) и все точки прямой по одну сторону от неё. Любая точка прямой делит её на два <b>дополнительных</b> луча.</p>'}
+ ],
+ qs:[
+  {id:'1.1',tag:'теория',type:'choice',q:'Сколько прямых можно провести через две различные точки?',opts:['Ни одной','Ровно одну','Две','Бесконечно много'],ans:1,
+   hint:'Это одно из основных свойств (аксиом) прямой.',
+   sol:['Основное свойство прямой: через любые две точки проходит прямая, и притом только одна.','Поэтому прямую можно назвать двумя её точками: «прямая AB».']},
+  {id:'1.2',tag:'теория',type:'choice',q:'Сколько общих точек могут иметь две различные прямые?',opts:['Только одну','Одну или ни одной','Две','Сколько угодно'],ans:1,
+   hint:'Представь, что общих точек две. Что тогда говорит свойство из задания 1.1?',
+   sol:['Если бы у двух прямых было две общие точки, через эти точки проходили бы две разные прямые. Это противоречит основному свойству прямой.','Значит, общих точек не больше одной: прямые либо пересекаются в одной точке, либо не пересекаются вовсе.']},
+  {id:'1.3',tag:'практика',type:'num',fig:'seg',q:'Точка C лежит на отрезке AB, AC = 7 см, CB = 5 см. Найдите длину отрезка AB.',ans:12,unit:'см',
+   hint:'Точка на отрезке делит его на две части. Весь отрезок равен сумме частей.',
+   sol:['Точка C лежит на отрезке AB, значит AB = AC + CB.','AB = 7 + 5 = 12 (см).']},
+  {id:'1.4',tag:'практика',type:'num',q:'Точка K лежит на отрезке MN длиной 20 см. Отрезок MK на 4 см длиннее отрезка KN. Найдите KN.',ans:8,unit:'см',
+   hint:'Обозначь KN через x. Тогда MK = x + 4. Сложи части и приравняй к 20.',
+   sol:['Пусть KN = x см, тогда MK = (x + 4) см.','MK + KN = MN, то есть x + 4 + x = 20.','2x = 16, x = 8.','KN = 8 см. Проверка: MK = 12 см, 12 + 8 = 20 ✓']},
+  {id:'1.5',tag:'практика',type:'choice',q:'Точки A, B и C лежат на одной прямой, AB = 9 см, BC = 4 см. Какой может быть длина AC?',opts:['Только 13 см','Только 5 см','5 см или 13 см','4 см или 9 см'],ans:2,
+   hint:'В условии не сказано, какая точка лежит между двумя другими. Перебери варианты.',
+   sol:['Порядок точек не задан, поэтому рассматриваем все случаи.','B между A и C: AC = AB + BC = 9 + 4 = 13 см.','C между A и B: AB = AC + CB, значит AC = 9 − 4 = 5 см.','A между B и C: тогда BC = BA + AC, то есть 4 = 9 + AC. Так не бывает.','Ответ: 5 см или 13 см. Если расположение точек не указано, проверяй все случаи.']},
+  {id:'1.6',tag:'практика',type:'num',q:'Точка M — середина отрезка AB, AM = 6,5 см. Найдите AB.',ans:13,unit:'см',
+   hint:'Середина — это точка, которая делит отрезок на две равные части.',
+   sol:['Середина делит отрезок пополам: AM = MB = 6,5 см.','AB = AM + MB = 6,5 + 6,5 = 13 (см).']},
+  {id:'1.7',tag:'практика',type:'num',q:'На прямой отметили 4 точки. Сколько всего получилось отрезков с концами в этих точках?',ans:6,unit:'шт.',
+   hint:'Назови точки A, B, C, D и выпиши все пары: AB, AC… Отрезки AB и BA — один и тот же.',
+   sol:['Обозначим точки A, B, C, D.','Отрезки с концом A: AB, AC, AD — 3.','С концом B (новые): BC, BD — 2.','С концом C (новые): CD — 1.','Всего 3 + 2 + 1 = 6 отрезков.']}
+ ]},
+{id:'t2',n:2,title:'Углы и их измерение',sub:'Виды углов, сложение углов и биссектриса.',
+ theory:[
+  {h:'Угол',t:'<p>Угол — фигура из точки (вершины) и двух лучей с началом в этой точке (сторон). Записывают ∠AOB или ∠O — вершина всегда в середине записи.</p><p class="key">Развёрнутый угол = 180°, прямой = 90°, острый — меньше 90°, тупой — больше 90° и меньше 180°.</p>'},
+  {h:'Сложение углов и биссектриса',t:'<p class="key">Если луч OC проходит между сторонами угла AOB, то ∠AOB = ∠AOC + ∠COB.</p><p><b>Биссектриса угла</b> — луч из вершины, который делит угол на два равных угла.</p><p>Транспортир: центр — в вершину угла, одну сторону — вдоль нулевой отметки, читаем по той же шкале.</p>',fig:'th2'}
+ ],
+ qs:[
+  {id:'2.1',tag:'теория',type:'choice',q:'Какой угол называют тупым?',opts:['Меньше 90°','Равный 90°','Больше 90°, но меньше 180°','Равный 180°'],ans:2,
+   hint:'Сравни с прямым (90°) и развёрнутым (180°) углом.',
+   sol:['Острый угол меньше 90°, прямой равен 90°, тупой больше 90° и меньше 180°, развёрнутый равен 180°.','Например, 135° — тупой угол.']},
+  {id:'2.2',tag:'практика',type:'num',fig:'ang48',q:'Луч OC проходит между сторонами угла AOB, ∠AOC = 48°, ∠COB = 37°. Найдите ∠AOB.',ans:85,unit:'°',
+   hint:'Луч внутри угла делит его на два угла. Весь угол равен их сумме.',
+   sol:['Луч OC проходит между сторонами угла, значит ∠AOB = ∠AOC + ∠COB.','∠AOB = 48° + 37° = 85°.']},
+  {id:'2.3',tag:'практика',type:'num',fig:'bis34',q:'OM — биссектриса угла AOB, ∠AOM = 34°. Найдите ∠AOB.',ans:68,unit:'°',
+   hint:'Биссектриса делит угол на два равных угла.',
+   sol:['Биссектриса делит угол пополам: ∠AOM = ∠MOB = 34°.','∠AOB = 34° + 34° = 68°.']},
+  {id:'2.4',tag:'практика',type:'num',q:'∠AOB = 120°. Луч OC проходит внутри угла, причём ∠AOC в 3 раза больше ∠COB. Найдите ∠COB.',ans:30,unit:'°',
+   hint:'Меньший угол обозначь через x, тогда больший равен 3x.',
+   sol:['Пусть ∠COB = x, тогда ∠AOC = 3x.','∠AOC + ∠COB = ∠AOB: 3x + x = 120°.','4x = 120°, x = 30°.','∠COB = 30°. Проверка: ∠AOC = 90°, 90° + 30° = 120° ✓']},
+  {id:'2.5',tag:'практика',type:'num',q:'Угол составляет третью часть развёрнутого угла. Найдите угол между его биссектрисой и одной из его сторон.',ans:30,unit:'°',
+   hint:'Сначала найди сам угол: развёрнутый угол равен 180°.',
+   sol:['Развёрнутый угол равен 180°, его третья часть: 180° : 3 = 60°.','Биссектриса делит этот угол пополам: 60° : 2 = 30°.']},
+  {id:'2.6',tag:'практика',type:'num',q:'Какой угол образуют часовая и минутная стрелки ровно в 4 часа?',ans:120,unit:'°',
+   hint:'Циферблат — полный круг, 360°. На нём 12 одинаковых промежутков между цифрами.',
+   sol:['Полный оборот — 360°, промежутков 12, значит между соседними цифрами 360° : 12 = 30°.','В 4:00 минутная стрелка на 12, часовая на 4 — между ними 4 промежутка.','4 · 30° = 120°.']}
+ ]},
+{id:'t3',n:3,title:'Смежные и вертикальные углы',sub:'Два главных свойства, на которых держится половина задач четверти.',
+ theory:[
+  {h:'Смежные углы',t:'<p>У смежных углов одна сторона общая, а две другие — дополнительные лучи (вместе образуют прямую).</p><p class="key">Сумма смежных углов равна 180°.</p><p>Отсюда: если один смежный угол острый, другой тупой; если один прямой, другой тоже прямой.</p>',fig:'th3a'},
+  {h:'Вертикальные углы',t:'<p>Стороны одного угла являются продолжениями сторон другого.</p><p class="key">Вертикальные углы равны.</p><p>При пересечении двух прямых получаются 4 угла: соседние — смежные, противоположные — вертикальные. Зная один угол, найдёшь все четыре. На рисунке ∠1 = ∠3, ∠2 = ∠4, ∠1 + ∠2 = 180°.</p>',fig:'th3b'}
+ ],
+ qs:[
+  {id:'3.1',tag:'практика',type:'num',q:'Один из смежных углов равен 65°. Найдите другой.',ans:115,unit:'°',
+   hint:'Сумма смежных углов равна 180°.',
+   sol:['Сумма смежных углов равна 180°.','180° − 65° = 115°.']},
+  {id:'3.2',tag:'практика',type:'num',q:'Смежные углы относятся как 2 : 7. Найдите больший из них.',ans:140,unit:'°',
+   hint:'Если углы относятся как 2 : 7, их можно записать как 2x и 7x.',
+   sol:['Пусть углы равны 2x и 7x.','Углы смежные: 2x + 7x = 180°, 9x = 180°, x = 20°.','Больший угол: 7 · 20° = 140°. Меньший 40°, 40° + 140° = 180° ✓']},
+  {id:'3.3',tag:'практика',type:'num',q:'Один из смежных углов на 40° больше другого. Найдите меньший угол.',ans:70,unit:'°',
+   hint:'Меньший угол — x, тогда больший — x + 40°.',
+   sol:['Пусть меньший угол x, тогда больший x + 40°.','x + x + 40° = 180°, 2x = 140°, x = 70°.','Меньший угол 70°, больший 110°.']},
+  {id:'3.4',tag:'практика',type:'num',fig:'cross38',q:'Две прямые пересекаются. Один из образовавшихся углов равен 38°. Найдите наибольший из четырёх углов.',ans:142,unit:'°',
+   hint:'Соседние углы при пересечении прямых — смежные, противоположные — вертикальные.',
+   sol:['Угол, соседний с углом 38°, смежный с ним: 180° − 38° = 142°.','Противоположные углы вертикальные и равны, поэтому углы такие: 38°, 142°, 38°, 142°.','Наибольший — 142°.']},
+  {id:'3.5',tag:'практика',type:'num',q:'При пересечении двух прямых сумма двух из образовавшихся углов равна 100°. Найдите больший из четырёх углов.',ans:130,unit:'°',
+   hint:'Могут ли эти два угла быть смежными? Чему равна сумма смежных?',
+   sol:['Если бы углы были смежными, их сумма была бы 180°, а не 100°. Значит, это вертикальные углы.','Вертикальные углы равны: каждый 100° : 2 = 50°.','Два других угла смежны с ними: 180° − 50° = 130°.']},
+  {id:'3.6',tag:'теория',type:'choice',q:'Могут ли два смежных угла быть оба тупыми?',opts:['Да, всегда','Да, если они равны','Нет','Только если один из них прямой'],ans:2,
+   hint:'Тупой угол больше 90°. Что будет, если сложить два таких угла?',
+   sol:['Каждый тупой угол больше 90°, значит сумма двух тупых больше 180°.','Сумма смежных углов ровно 180°, поэтому оба тупыми они быть не могут.','Если один смежный угол тупой, другой обязательно острый.']},
+  {id:'3.7',tag:'теория',type:'choice',q:'Верно ли утверждение: «Если два угла равны, то они вертикальные»?',opts:['Верно','Неверно'],ans:1,
+   hint:'Попробуй нарисовать два равных угла, которые не будут вертикальными.',
+   sol:['Вертикальные углы всегда равны, но обратное утверждение неверно.','Пример: два угла по 30°, нарисованные в разных местах тетради, равны, а вершины у них разные.','Частая ловушка: из «вертикальные → равны» не следует «равны → вертикальные».']}
+ ]},
+{id:'t4',n:4,title:'Перпендикулярные прямые',sub:'Прямой угол, угол между прямыми и задачи «в несколько шагов».',
+ theory:[
+  {h:'Перпендикулярность',t:'<p>Прямые <i>a</i> и <i>b</i> перпендикулярны (<i>a</i> ⊥ <i>b</i>), если при пересечении образуют прямой угол. Тогда все четыре угла прямые: смежный с прямым — 90°, вертикальные равны.</p><p class="key">Через каждую точку прямой можно провести перпендикулярную ей прямую, и притом только одну.</p>',fig:'th4'},
+  {h:'Угол между прямыми',t:'<p>Углом между пересекающимися прямыми называют меньший из образовавшихся углов. Он всегда не больше 90°.</p><p>В задачах с перпендикуляром ищи прямой угол, который делится на части: 90° = одна часть + другая.</p>'}
+ ],
+ qs:[
+  {id:'4.1',tag:'теория',type:'num',q:'Прямые a и b пересекаются, и один из образовавшихся углов прямой. Сколько всего прямых углов образовалось?',ans:4,unit:'шт.',
+   hint:'Найди угол, смежный с прямым, и угол, вертикальный ему.',
+   sol:['Угол, смежный с прямым: 180° − 90° = 90°.','Вертикальные углы равны, поэтому оставшиеся два угла тоже по 90°.','Все 4 угла прямые — прямые перпендикулярны: a ⊥ b.']},
+  {id:'4.2',tag:'практика',type:'num',q:'Две прямые пересекаются, один из углов равен 130°. Чему равен угол между этими прямыми?',ans:50,unit:'°',
+   hint:'Угол между пересекающимися прямыми — меньший из образовавшихся углов.',
+   sol:['При пересечении получаются углы 130°, 50°, 130°, 50° (180° − 130° = 50°).','Угол между прямыми — меньший из них.','Ответ: 50°.']},
+  {id:'4.3',tag:'практика',type:'num',fig:'perpK',q:'Прямые AB и CD пересекаются в точке O, луч OK перпендикулярен прямой AB, ∠COK = 25° (см. рисунок). Найдите ∠BOD.',ans:65,unit:'°',
+   hint:'Сначала найди ∠AOC: вместе с ∠COK он составляет прямой угол AOK.',
+   sol:['OK ⊥ AB, значит ∠AOK = 90°.','Луч OC проходит внутри угла AOK: ∠AOC = 90° − 25° = 65°.','∠BOD и ∠AOC вертикальные, значит ∠BOD = 65°.']},
+  {id:'4.4',tag:'практика',type:'num',fig:'perpBis',q:'Лучи OA и OB перпендикулярны, OC — биссектриса угла AOB. Луч OE — продолжение луча OA за точку O. Найдите ∠COE.',ans:135,unit:'°',
+   hint:'Лучи OA и OE вместе образуют прямую. Значит, ∠AOC и ∠COE — смежные.',
+   sol:['∠AOB = 90°, OC — биссектриса: ∠AOC = 90° : 2 = 45°.','OA и OE — дополнительные лучи, поэтому ∠AOC и ∠COE смежные.','∠COE = 180° − 45° = 135°.']},
+  {id:'4.5',tag:'теория',type:'choice',q:'Сколько прямых, перпендикулярных прямой a, можно провести через точку, лежащую на прямой a?',opts:['Ни одной','Одну','Две','Бесконечно много'],ans:1,
+   hint:'Попробуй начертить угольником. Сколько получается разных прямых?',
+   sol:['Через каждую точку прямой можно провести перпендикулярную ей прямую, и притом только одну.','Это утверждение из учебника — его нужно уметь сформулировать.']}
+ ]},
+{id:'t5',n:5,title:'Треугольники. Признаки равенства',sub:'Периметр, равные треугольники и первые доказательства.',
+ note:'Второй признак и медианы, биссектрисы, высоты в некоторых школах проходят уже в начале второй четверти.',
+ theory:[
+  {h:'Треугольник',t:'<p>Три точки, не лежащие на одной прямой, и три отрезка, которые их соединяют. Точки — вершины, отрезки — стороны.</p><p class="key">Периметр P = AB + BC + AC.</p><p>Равные треугольники совмещаются наложением, у них равны соответственные стороны и углы. В записи △ABC = △KLM порядок вершин важен: A↔K, B↔L, C↔M.</p>'},
+  {h:'Признаки равенства',t:'<p class="key">Первый признак: если две стороны и угол между ними одного треугольника соответственно равны двум сторонам и углу между ними другого, то треугольники равны.</p><p class="key">Второй признак: если сторона и два прилежащих к ней угла одного треугольника соответственно равны стороне и двум прилежащим углам другого, то треугольники равны.</p><p>На рисунке равные стороны отмечены одинаковым числом чёрточек, равные углы — дугами.</p>',fig:'th5'},
+  {h:'Медиана, биссектриса, высота',t:'<p><b>Медиана</b> — отрезок из вершины к середине противоположной стороны. <b>Биссектриса</b> треугольника — отрезок биссектрисы угла от вершины до противоположной стороны. <b>Высота</b> — перпендикуляр из вершины к прямой, содержащей противоположную сторону. У каждого треугольника их по три.</p>'}
+ ],
+ qs:[
+  {id:'5.1',tag:'практика',type:'num',q:'Периметр треугольника равен 30 см, а его стороны относятся как 3 : 5 : 7. Найдите большую сторону.',ans:14,unit:'см',
+   hint:'Стороны: 3x, 5x и 7x. Периметр — сумма всех сторон.',
+   sol:['Пусть стороны 3x, 5x и 7x см.','3x + 5x + 7x = 30, 15x = 30, x = 2.','Стороны 6, 10 и 14 см. Большая — 14 см.']},
+  {id:'5.2',tag:'практика',type:'num',q:'В треугольнике ABC сторона AB = 8 см, сторона BC на 4 см больше AB, а сторона AC в 2 раза меньше BC. Найдите периметр треугольника.',ans:26,unit:'см',
+   hint:'Находи стороны по очереди, в том порядке, в каком они названы в условии.',
+   sol:['BC = 8 + 4 = 12 см.','AC = 12 : 2 = 6 см.','P = AB + BC + AC = 8 + 12 + 6 = 26 см.']},
+  {id:'5.3',tag:'практика',type:'num',q:'△ABC = △KLM, AB = 5 см, BC = 7 см, AC = 9 см. Найдите LM.',ans:7,unit:'см',
+   hint:'Вершины в записи идут по порядку: A↔K, B↔L, C↔M.',
+   sol:['Из записи △ABC = △KLM: A соответствует K, B — L, C — M.','Стороне LM соответствует сторона BC.','LM = BC = 7 см.']},
+  {id:'5.4',tag:'теория',type:'choice',q:'В △ABC и △MNK: AB = MN, BC = NK, ∠B = ∠N. Что можно сказать о треугольниках?',opts:['Они равны по первому признаку','Данных недостаточно','Равны, только если ещё AC = MK','Они не могут быть равны'],ans:0,
+   hint:'Где находится угол B относительно сторон AB и BC?',
+   sol:['Угол B лежит между сторонами AB и BC, угол N — между MN и NK.','Две стороны и угол между ними одного треугольника равны двум сторонам и углу между ними другого.','По первому признаку △ABC = △MNK.']},
+  {id:'5.5',tag:'теория',type:'choice',q:'В △ABC и △MNK: AB = MN, BC = NK, ∠A = ∠M. Можно ли сразу применить первый признак?',opts:['Да','Нет'],ans:1,
+   hint:'Первый признак требует угол именно между равными сторонами.',
+   sol:['Стороны AB и BC сходятся в вершине B, значит угол между ними — ∠B.','Дан ∠A — он не лежит между AB и BC.','Первый признак применить нельзя. Всегда проверяй, что угол заключён между сторонами.']},
+  {id:'5.6',tag:'доказательство',type:'choice',fig:'mid',q:'Отрезки AB и CD пересекаются в точке O, которая является серединой каждого из них. Нужно доказать, что △AOC = △BOD. Какое равенство углов здесь используем?',opts:['∠AOC = ∠BOD, потому что они вертикальные','∠AOC = ∠BOD, потому что они смежные','∠A = ∠B, потому что треугольники равны','Углы не нужны'],ans:0,
+   hint:'Посмотри на углы при вершине O. Как расположены их стороны?',
+   sol:['AO = OB и CO = OD, потому что O — середина каждого отрезка.','∠AOC = ∠BOD как вертикальные.','Две стороны и угол между ними равны, значит △AOC = △BOD по первому признаку.','Вариант «∠A = ∠B, потому что треугольники равны» — ошибка: равенство треугольников мы ещё только доказываем.']},
+  {id:'5.7',tag:'доказательство',type:'num',fig:'mid',q:'В задаче 5.6 известно, что AC = 7 см. Найдите BD.',ans:7,unit:'см',
+   hint:'В равных треугольниках соответственные стороны равны.',
+   sol:['Мы доказали, что △AOC = △BOD.','AC лежит против ∠AOC, BD — против равного ему ∠BOD, значит это соответственные стороны.','BD = AC = 7 см.']},
+  {id:'5.8',tag:'теория',type:'choice',q:'В △ABC и △A₁B₁C₁: AB = A₁B₁, ∠A = ∠A₁, ∠B = ∠B₁. Равны ли треугольники?',opts:['Да, по первому признаку','Да, по второму признаку','Нет, нужна ещё одна сторона','Нельзя сказать'],ans:1,
+   hint:'Дана одна сторона и два угла. Где лежат эти углы относительно стороны?',
+   sol:['Углы A и B прилежат к стороне AB: они в её концах.','Второй признак: сторона и два прилежащих к ней угла.','△ABC = △A₁B₁C₁ по второму признаку.']},
+  {id:'5.9',tag:'теория',type:'choice',q:'Медиана треугольника — это отрезок, который соединяет вершину с…',opts:['серединой противоположной стороны','противоположной стороной под прямым углом','серединой соседней стороны','другой вершиной'],ans:0,
+   hint:'Слово «медиана» связано с серединой (лат. medius — средний).',
+   sol:['Медиана — отрезок из вершины к середине противоположной стороны.','Отрезок из вершины под прямым углом к противоположной стороне — это высота.']}
+ ]},
+{id:'kr1',n:'К',kind:'kr',title:'Контрольная 1',sub:'Все задачи раздела «Подготовка к контрольной работе 1» из учебника (с. 54) с разбором. К каждой задаче добавлена похожая, с другими числами, для закрепления.',
+ note:'Рисунки перерисованы по учебнику, соблюдать масштаб не обязательно: решаем по условию, а не по линейке.',
+ theory:[
+  {h:'Что вспомнить перед контрольной',t:'<p class="key">Любые два луча с общим началом образуют угол. Если n лучей лежат внутри одного угла, меньшего 180°, то углов 1 + 2 + … + (n − 1).</p><p>Радиус равен половине диаметра, все радиусы одной окружности равны. Одинаковые чёрточки на рисунке означают равные отрезки.</p><p class="key">Если несколько углов с общей вершиной вместе составляют развёрнутый угол, их сумма 180°.</p><p>Вертикальные углы равны, смежные в сумме дают 180°, перпендикулярные прямые образуют угол 90°.</p><p class="key">Если луч AD внутри угла BAC, а AK и AM — биссектрисы углов BAD и DAC, то ∠KAM = ½ ∠BAC.</p>'}
+ ],
+ qs:[
+  {id:'k1a',label:'1 а)',tag:'учебник',type:'num',fig:'k1a',q:'Из точки A выходят лучи AB, AE, AD и AC. Сколько на рисунке углов, меньших 180°?',ans:6,unit:'шт.',
+   hint:'Угол образует любая пара лучей. Перебери пары, начиная с луча AC.',
+   sol:['Любые два луча с общим началом образуют угол. Все лучи лежат внутри острого угла BAC, поэтому каждый такой угол меньше 180°.','С лучом AC: ∠CAD, ∠CAE, ∠CAB — 3 угла.','С лучом AD (новые): ∠DAE, ∠DAB — 2.','С лучом AE: ∠EAB — 1.','Всего 3 + 2 + 1 = 6 углов.']},
+  {id:'k1b',label:'1 б)',tag:'учебник',type:'num',fig:'k1b',q:'В треугольнике ABC проведён отрезок BM, точка M лежит на стороне AC. Сколько на рисунке углов, меньших 180°?',ans:7,unit:'шт.',
+   hint:'Считай по вершинам: A, B, C, M. В точке M есть развёрнутый угол AMC — его не считаем.',
+   sol:['Считаем по вершинам: в каждой берём пары лучей, которые из неё выходят.','A: ∠BAC — 1 (M лежит на стороне AC, новый луч не появляется).','C: ∠BCA — 1.','B: лучи BA, BM, BC — ∠ABM, ∠MBC, ∠ABC — 3.','M: ∠AMB и ∠BMC — 2. ∠AMC развёрнутый (180°), не считаем.','Всего 1 + 1 + 3 + 2 = 7.']},
+  {id:'k1c',label:'1 в)',tag:'учебник',type:'num',fig:'k1c',q:'В квадрате ABCD проведены отрезки BD и CM (точка M на стороне AD), они пересекаются в точке K. Сколько на рисунке углов, меньших 180°?',ans:16,unit:'шт.',
+   hint:'Обойди все точки: A, B, C, D, M, K. В точке K пересекаются два отрезка — там 4 угла.',
+   sol:['Вершины углов: A, B, C, D, M, K. В каждой считаем пары лучей.','A: ∠BAD — 1 (M лежит на стороне AD).','B: ∠ABD, ∠DBC, ∠ABC — 3.','C: ∠BCM, ∠MCD, ∠BCD — 3.','D: ∠ADB, ∠BDC, ∠ADC — 3.','M: ∠AMC и ∠CMD — 2 (∠AMD развёрнутый).','K: ∠BKC, ∠CKD, ∠DKM, ∠MKB — 4 (∠BKD и ∠CKM развёрнутые).','Всего 1 + 3 + 3 + 3 + 2 + 4 = 16.']},
+  {id:'k1x',label:'1 ★',tag:'похожая',type:'num',q:'Из одной точки выходят 5 лучей, и все они лежат внутри одного острого угла. Сколько получилось углов, меньших 180°?',ans:10,unit:'шт.',
+   hint:'Как в задаче 1 а): с первым лучом 4 пары, со вторым новых 3…',
+   sol:['С первым лучом — 4 угла, со вторым (новые) — 3, с третьим — 2, с четвёртым — 1.','4 + 3 + 2 + 1 = 10.']},
+  {id:'k2a',label:'2 а)',tag:'учебник',type:'num',fig:'k2a',q:'Диаметр окружности равен 48, O — центр. Отрезки OA, OB и AB отмечены одинаковыми чёрточками. Найдите длину ломаной AO + OB + AB.',ans:72,
+   hint:'Диаметр 48 — значит радиус 24. OA и OB — радиусы, а AB отмечен той же чёрточкой.',
+   sol:['Радиус — половина диаметра: 48 : 2 = 24.','OA и OB — радиусы: OA = OB = 24.','AB отмечен той же чёрточкой, значит AB = 24.','AO + OB + AB = 24 + 24 + 24 = 72.']},
+  {id:'k2b',label:'2 б)',tag:'учебник',type:'num',fig:'k2b',q:'Диаметр окружности равен 48. Отрезок AB проходит через центр O, отрезки BC и DA отмечены такими же чёрточками, как BO и OA. Найдите DA + AB + BC.',ans:96,
+   hint:'Какой отрезок проходит через центр O? Как называется такая хорда?',
+   sol:['AB проходит через центр — это диаметр: AB = 48.','BO и OA — радиусы по 24. BC и DA отмечены так же, значит BC = DA = 24.','DA + AB + BC = 24 + 48 + 24 = 96.']},
+  {id:'k2c',label:'2 в)',tag:'учебник',type:'num',fig:'k2c',q:'Диаметр окружности равен 48. Отрезок AD проходит через центр O, отрезки AB, BC и CD отмечены такими же чёрточками, как радиус AO. Найдите AB + BC + CD + DA.',ans:120,
+   hint:'DA — диаметр. Остальные три отрезка равны радиусу.',
+   sol:['AD проходит через центр — это диаметр: AD = 48.','AB, BC и CD равны радиусу AO: каждый 24.','24 + 24 + 24 + 48 = 120.']},
+  {id:'k2x',label:'2 ★',tag:'похожая',type:'num',q:'Диаметр окружности равен 30, O — центр, хорда AB равна радиусу. Найдите периметр треугольника AOB.',ans:45,
+   hint:'Все три стороны треугольника AOB равны радиусу.',
+   sol:['Радиус: 30 : 2 = 15.','OA = OB = 15 (радиусы), AB = 15 (по условию).','P = 15 + 15 + 15 = 45.']},
+  {id:'k3a',label:'3 а)',tag:'учебник',type:'num',fig:'k3a',q:'Углы 1, 3 и 2 с общей вершиной вместе составляют развёрнутый угол. ∠1 = ∠3, ∠2 = 56°. Найдите ∠3.',ans:62,unit:'°',
+   hint:'Сумма трёх углов 180°. Два из них равны — обозначь каждый через x.',
+   sol:['Три угла составляют развёрнутый: ∠1 + ∠3 + ∠2 = 180°.','Пусть ∠1 = ∠3 = x: x + x + 56° = 180°.','2x = 124°, x = 62°.','∠3 = 62°. Проверка: 62° + 62° + 56° = 180° ✓']},
+  {id:'k3b',label:'3 б)',tag:'учебник',type:'num',fig:'k3b',q:'Углы 1, 2 и 3 вместе составляют развёрнутый угол и относятся как 5 : 6 : 7. Найдите ∠3.',ans:70,unit:'°',
+   hint:'Запиши углы как 5x, 6x и 7x.',
+   sol:['∠1 + ∠2 + ∠3 = 180°.','Пусть ∠1 = 5x, ∠2 = 6x, ∠3 = 7x: 18x = 180°, x = 10°.','∠3 = 7 · 10° = 70°. Проверка: 50° + 60° + 70° = 180° ✓']},
+  {id:'k3c',label:'3 в)',tag:'учебник',type:'num',fig:'k3c',q:'Углы 1, 3 и 2 вместе составляют развёрнутый угол, причём ∠3 − ∠1 = ∠2. Найдите ∠3.',ans:90,unit:'°',
+   hint:'Перенеси ∠1 в другую часть: ∠3 = ∠1 + ∠2. Подставь это в сумму 180°.',
+   sol:['Из условия ∠3 = ∠1 + ∠2.','В сумме ∠1 + ∠2 + ∠3 = 180° заменим ∠1 + ∠2 на ∠3: ∠3 + ∠3 = 180°.','∠3 = 90°. Сами ∠1 и ∠2 найти нельзя, но они и не нужны.']},
+  {id:'k3x',label:'3 ★',tag:'похожая',type:'num',q:'Три угла с общей вершиной составляют развёрнутый угол и относятся как 2 : 3 : 4. Найдите больший из них.',ans:80,unit:'°',
+   hint:'2x + 3x + 4x = 180°.',
+   sol:['2x + 3x + 4x = 180°, 9x = 180°, x = 20°.','Больший угол: 4 · 20° = 80° (углы 40°, 60°, 80°).']},
+  {id:'k4a',label:'4 а)',tag:'учебник',type:'num',fig:'k4a',q:'Прямые AB и DE пересекаются в точке O, OC ⊥ OE. ∠2 + ∠3 = 68°. Найдите ∠1.',ans:56,unit:'°',
+   hint:'∠2 и ∠3 — вертикальные. Над прямой AB лежат три угла: ∠2, прямой угол и ∠1.',
+   sol:['∠2 = ∠AOE и ∠3 = ∠BOD вертикальные, поэтому равны: каждый 68° : 2 = 34°.','Над прямой AB углы ∠AOE, ∠EOC и ∠COB составляют развёрнутый угол: ∠2 + 90° + ∠1 = 180°.','∠1 = 180° − 90° − 34° = 56°.']},
+  {id:'k4b',label:'4 б)',tag:'учебник',type:'num',fig:'k4b',q:'Прямые AB и DE пересекаются в точке O, луч OC перпендикулярен прямой DE. ∠2 : ∠3 = 7 : 8. Найдите ∠1.',ans:48,unit:'°',
+   hint:'Сначала найди ∠2 и ∠3: вместе с прямым углом они дают 180°. Потом посмотри, какому углу вертикален ∠1.',
+   sol:['Над прямой AB: ∠2 + 90° + ∠3 = 180°, значит ∠2 + ∠3 = 90°.','Пусть ∠2 = 7x, ∠3 = 8x: 15x = 90°, x = 6°. ∠2 = 42°, ∠3 = 48°.','∠1 = ∠AOE и ∠3 = ∠BOD вертикальные, значит ∠1 = 48°.']},
+  {id:'k4c',label:'4 в)',tag:'учебник',type:'num',fig:'k4c',q:'Прямые AB и CD пересекаются в точке O, OC ⊥ OE. ∠2 + ∠3 = 200°. Найдите ∠1.',ans:35,unit:'°',
+   hint:'Вырази ∠1 и ∠3 через ∠2. Помогут смежные углы и прямой угол COE.',
+   sol:['∠COB = ∠COE + ∠EOB = 90° + ∠2.','∠1 = ∠AOC и ∠COB смежные (прямая AB): ∠1 = 180° − 90° − ∠2 = 90° − ∠2.','∠1 и ∠3 = ∠AOD смежные (прямая CD): ∠3 = 180° − ∠1 = 90° + ∠2.','∠2 + ∠3 = ∠2 + 90° + ∠2 = 200°, 2·∠2 = 110°, ∠2 = 55°.','∠1 = 90° − 55° = 35°. Проверка: ∠3 = 145°, 55° + 145° = 200° ✓']},
+  {id:'k4x',label:'4 ★',tag:'похожая',type:'num',fig:'k4a',q:'Рисунок как в задаче 4 а): OC ⊥ OE, но ∠2 + ∠3 = 50°. Найдите ∠1.',ans:65,unit:'°',
+   hint:'Как в 4 а): ∠2 = ∠3, а ∠2 + 90° + ∠1 = 180°.',
+   sol:['∠2 = ∠3 (вертикальные) = 50° : 2 = 25°.','∠1 = 180° − 90° − 25° = 65°.']},
+  {id:'k5a',label:'5 а)',tag:'учебник',type:'num',fig:'k5a',q:'Луч AD проходит внутри угла BAC, AK и AM — биссектрисы углов BAD и CAD. AB ⊥ AC, ∠BAM = 71°. Найдите ∠KAM.',ans:45,unit:'°',
+   hint:'∠KAM = ∠KAD + ∠DAM, и каждая часть — половина своего угла.',
+   sol:['∠KAM = ∠KAD + ∠DAM = ½∠BAD + ½∠DAC = ½(∠BAD + ∠DAC) = ½∠BAC.','AB ⊥ AC, значит ∠BAC = 90°.','∠KAM = 90° : 2 = 45°.','∠BAM = 71° для ответа не нужен, но им можно проверить себя: ∠MAC = 90° − 71° = 19°, ∠DAC = 38°, ∠BAD = 52°, ∠KAD = 26°, 26° + 19° = 45° ✓']},
+  {id:'k5b',label:'5 б)',tag:'учебник',type:'num',fig:'k5b',q:'∠BAC = 180°, луч AD лежит внутри него, AK и AM — биссектрисы углов BAD и CAD. Найдите ∠KAM.',ans:90,unit:'°',
+   hint:'Правило то же, что в 5 а): ∠KAM = ½∠BAC.',
+   sol:['Как в 5 а): ∠KAM = ½∠BAC.','∠KAM = 180° : 2 = 90°.','Вывод: биссектрисы двух смежных углов перпендикулярны.']},
+  {id:'k5c',label:'5 в)',tag:'учебник',type:'num',fig:'k5c',q:'Луч AD внутри угла BAC, AK и AM — биссектрисы углов BAD и CAD. ∠BAM = 50°, ∠CAK = 40°. Найдите ∠KAM.',ans:30,unit:'°',
+   hint:'Обозначь ∠BAK = ∠KAD = x и ∠DAM = ∠MAC = y. Запиши ∠BAM и ∠CAK через x и y и сложи.',
+   sol:['Пусть ∠BAK = ∠KAD = x, ∠DAM = ∠MAC = y.','∠BAM = 2x + y = 50°, ∠CAK = 2y + x = 40°.','Сложим: 3x + 3y = 90°, значит x + y = 30°.','∠KAM = ∠KAD + ∠DAM = x + y = 30°.']},
+  {id:'k5x',label:'5 ★',tag:'похожая',type:'num',q:'Луч AD проходит внутри угла BAC, равного 130°. AK и AM — биссектрисы углов BAD и CAD. Найдите ∠KAM.',ans:65,unit:'°',
+   hint:'Вспомни правило из 5 а).',
+   sol:['∠KAM = ½∠BAC.','130° : 2 = 65°.']}
+ ]}
+];
+const ALLQ={};TOPICS.forEach(t=>t.qs.forEach(q=>{ALLQ[q.id]=q;q.topic=t.id}));
+
+/* ---------- состояние ---------- */
+const KEY='geom7-q1-v1';
+let S={a:{},tab:'kak',mix:null};
+try{const r=localStorage.getItem(KEY);if(r){const o=JSON.parse(r);if(o&&o.a)S=Object.assign(S,o)}}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const g=(ns,id)=>S.a[ns+'|'+id]||(S.a[ns+'|'+id]={tries:0,wrong:[]});
+const peekS=(ns,id)=>S.a[ns+'|'+id];
+
+/* ---------- отрисовка ---------- */
+const $=s=>document.querySelector(s);
+const L='АБВГ';
+function cardHTML(q,ns,label){label=label||q.label;
+  const s=peekS(ns,q.id)||{tries:0,wrong:[]};
+  const ok=s.st==='ok',bad=s.st==='bad';
+  let body='';
+  if(q.type==='choice'){
+    body='<div class="opts">'+q.opts.map((o,i)=>{
+      const c=ok&&i===q.ans?'ok':(s.wrong||[]).includes(i)?'bad':'';
+      const dis=ok||(s.wrong||[]).includes(i);
+      return `<button class="opt ${c}" data-act="pick" data-i="${i}" ${dis?'disabled':''}><span class="l">${L[i]}</span><span>${o}</span></button>`}).join('')+'</div>';
+  }else{
+    const iid=`in-${ns}-${q.id.replace('.','-')}`;
+    body=`<div class="num"><label for="${iid}">Ответ:</label><input id="${iid}" inputmode="decimal" autocomplete="off" value="${ok?q.ans.toString().replace('.',','):(s.val||'')}" ${ok?'disabled':''} data-inp><span class="unit">${q.unit||''}</span>${ok?'':'<button class="btn" data-act="check">Проверить</button>'}</div>`;
+  }
+  let fb='';
+  if(ok)fb=`<p class="fb ok">Верно${s.first?' с первой попытки':''}.</p>`;
+  else if(s.msg==='nan')fb='<p class="fb bad">Впиши число, например 12 или 6,5.</p>';
+  else if(bad)fb=`<p class="fb bad">Пока неверно${s.tries>1?` (попыток: ${s.tries})`:''}. ${s.hint?'Перечитай подсказку и попробуй ещё раз.':'Открой подсказку и попробуй ещё раз.'}</p>`;
+  const mark=ok?`<span class="mark ok">${s.first?'✓ верно':'✓'}</span>`:bad?'<span class="mark bad">ошибка</span>':'';
+  return `<article class="q ${ok?'is-ok':''}" data-q="${q.id}" data-ns="${ns}">
+    <div class="qhead"><span class="qn">${label||q.id}</span><span class="tag">${q.tag}</span>${mark}</div>
+    <p class="qt">${q.q}</p>
+    ${q.fig?FIG[q.fig]():''}
+    ${body}
+    ${fb}
+    <div class="acts">
+      <button class="btn ghost" data-act="hint" aria-pressed="${!!s.hint}">Подсказка</button>
+      <button class="btn ghost" data-act="sol" aria-pressed="${!!s.sol}">${ok?'Разбор':'Показать решение'}</button>
+    </div>
+    ${s.hint?`<p class="hint"><b>Подсказка:</b>${q.hint}</p>`:''}
+    ${s.sol?`<div class="sol"><h4>Как решать</h4><ol>${q.sol.map(x=>`<li>${x}</li>`).join('')}</ol></div>`:''}
+  </article>`;
+}
+const ebText=(t,s)=>(t.kind==='kr'?'Учебник, с. 54':`Тема ${t.n}`)+` · решено ${s.ok} из ${s.n}`;
+function topicStats(t,ns='main'){let ok=0,first=0;t.qs.forEach(q=>{const s=peekS(ns,q.id);if(s&&s.st==='ok'){ok++;if(s.first)first++}});return{ok,first,n:t.qs.length}}
+function renderScore(){
+  let ok=0,first=0,n=0;TOPICS.forEach(t=>{const s=topicStats(t);ok+=s.ok;first+=s.first;n+=s.n});
+  $('#score').innerHTML=`<div><b>${ok}</b> <span>из ${n} решено</span></div><div><b>${first}</b> <span>с первой попытки</span></div><div class="bar" aria-hidden="true"><i style="width:${n?ok/n*100:0}%"></i></div>`;
+}
+function renderTabs(){
+  const items=[{id:'kak',t:'Как решать'}].concat(TOPICS.map(t=>{const s=topicStats(t);return{id:t.id,t:t.kind==='kr'?t.title:`${t.n}. ${t.title}`,c:`${s.ok}/${s.n}`}})).concat([{id:'mix',t:'Смешанный тест'}]);
+  $('#tabs').innerHTML=items.map(i=>`<button class="tab" role="tab" data-tab="${i.id}" aria-selected="${S.tab===i.id}">${i.t}${i.c?`<small>${i.c}</small>`:''}</button>`).join('');
+}
+function renderKak(){
+  return `<section class="panel">
+  <div class="phead"><h2>Как решать задачи по геометрии</h2><p>Почти любая задача первой четверти решается по одной схеме. Если застрял — вернись сюда и пройди шаги по порядку.</p></div>
+  <div class="konspekt"><h3>Пять шагов</h3>
+   <ol class="steps">
+    <li><div><b>Сделай рисунок.</b>Крупно, по линейке. Отметь на нём всё, что дано: длины, градусы, равные отрезки чёрточками, равные углы дугами.</div></li>
+    <li><div><b>Запиши «Дано» и «Найти» (или «Доказать»).</b>Так видно, чего не хватает.</div></li>
+    <li><div><b>Найди правило, которое связывает данное с искомым.</b>Таблица ниже подскажет, какое правило включается от каких слов в условии.</div></li>
+    <li><div><b>Если соотношение «в 3 раза», «на 40° больше», «как 2 : 7» — вводи x.</b>Меньшую величину обозначь x, остальные вырази через x, составь уравнение.</div></li>
+    <li><div><b>Проверь ответ.</b>Подставь в условие. Смежные в сумме дают 180°? Длина положительная? Не забудь единицы: см, °.</div></li>
+   </ol>
+  </div>
+  <div class="konspekt"><h3>Слово в условии → правило</h3>
+   <div class="tablewrap"><table>
+    <tr><th>В условии</th><th>Используй</th></tr>
+    <tr><td>точка лежит на отрезке</td><td>AB = AC + CB</td></tr>
+    <tr><td>середина отрезка</td><td>делит отрезок на две равные части</td></tr>
+    <tr><td>луч внутри угла</td><td>∠AOB = ∠AOC + ∠COB</td></tr>
+    <tr><td>биссектриса</td><td>делит угол пополам</td></tr>
+    <tr><td>смежные углы</td><td>сумма 180°</td></tr>
+    <tr><td>прямые пересекаются</td><td>вертикальные равны, соседние в сумме 180°</td></tr>
+    <tr><td>перпендикулярны</td><td>угол 90°, все четыре угла прямые</td></tr>
+    <tr><td>относятся как 2 : 7</td><td>2x и 7x</td></tr>
+    <tr><td>точки на прямой, порядок не указан</td><td>рассмотри все случаи расположения</td></tr>
+    <tr><td>доказать, что треугольники равны</td><td>найди три пары равных элементов и признак; общая сторона тоже считается</td></tr>
+   </table></div>
+  </div>
+  <div class="konspekt"><h3>Образец оформления задачи на вычисление</h3>
+   <div class="sample">
+    <p><span class="lbl">Задача.</span> Смежные углы относятся как 4 : 5. Найдите эти углы.</p>
+    <p><span class="lbl">Дано:</span> ∠AOC и ∠COB — смежные, ∠AOC : ∠COB = 4 : 5.</p>
+    <p><span class="lbl">Найти:</span> ∠AOC, ∠COB.</p>
+    <p><span class="lbl">Решение.</span> Пусть ∠AOC = 4x, ∠COB = 5x. Сумма смежных углов 180°, поэтому 4x + 5x = 180°, 9x = 180°, x = 20°. Тогда ∠AOC = 80°, ∠COB = 100°.</p>
+    <p><span class="lbl">Проверка:</span> 80° + 100° = 180° ✓</p>
+    <p><span class="lbl">Ответ:</span> 80° и 100°.</p>
+   </div>
+  </div>
+  <div class="konspekt"><h3>Образец доказательства</h3>
+   <div class="rule-fig"><div>
+   <div class="sample">
+    <p><span class="lbl">Задача.</span> На рисунке AB = AD, ∠BAC = ∠DAC. Докажите, что BC = DC.</p>
+    <p><span class="lbl">Доказательство.</span> Рассмотрим △ABC и △ADC:</p>
+    <p>1) AB = AD — по условию;</p>
+    <p>2) ∠BAC = ∠DAC — по условию;</p>
+    <p>3) AC — общая сторона.</p>
+    <p>Значит, △ABC = △ADC по первому признаку (две стороны и угол между ними).</p>
+    <p>В равных треугольниках соответственные стороны равны, поэтому BC = DC, что и требовалось доказать.</p>
+   </div></div><div>${FIG.kite()}</div></div>
+  </div>
+  <p class="note">Как заниматься: прочитай конспект темы → реши задачи → ошибся — открой подсказку и попробуй снова → прочитай разбор, даже если решил верно → в конце пройди смешанный тест. Прогресс сохраняется в этом браузере.</p>
+  </section>`;
+}
+function renderTopic(t){
+  const st=topicStats(t);
+  return `<section class="panel">
+   <div class="phead"><div class="eyebrow">${ebText(t,st)}</div><h2>${t.title}</h2><p>${t.sub}</p>${t.note?`<p class="note">${t.note}</p>`:''}</div>
+   <div class="konspekt"><h3>Конспект</h3>
+    ${t.theory.map(r=>`<div class="rule">${r.fig?`<div class="rule-fig"><div><h4>${r.h}</h4>${r.t}</div><div>${FIG[r.fig]()}</div></div>`:`<h4>${r.h}</h4>${r.t}`}</div>`).join('')}
+   </div>
+   <div class="qs-title"><h3>Задачи</h3><button class="linkbtn" data-act="reset" data-topic="${t.id}">Сбросить ответы темы</button></div>
+   ${t.qs.map(q=>cardHTML(q,'main')).join('')}
+  </section>`;
+}
+function newMix(){
+  const ids=Object.keys(ALLQ);
+  for(let i=ids.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[ids[i],ids[j]]=[ids[j],ids[i]]}
+  S.mix=ids.slice(0,10);
+  Object.keys(S.a).forEach(k=>{if(k.startsWith('mix|'))delete S.a[k]});
+  save();
+}
+function mixStats(){let ok=0,first=0,done=0;(S.mix||[]).forEach(id=>{const s=peekS('mix',id);if(s&&s.st==='ok'){ok++;done++;if(s.first)first++}});return{ok,first}}
+function renderMix(){
+  if(!S.mix)newMix();
+  const m=mixStats();
+  return `<section class="panel">
+   <div class="phead"><h2>Смешанный тест</h2><p>10 случайных задач из всех тем. Номер в скобках — откуда задача, чтобы при ошибке вернуться к конспекту. Засчитывается ответ с первой попытки.</p></div>
+   <div class="mixres" id="mixres"><span>С первой попытки: <b>${m.first}</b> из 10 · решено <b>${m.ok}</b></span><button class="btn ghost" data-act="newmix">Новый вариант</button></div>
+   ${S.mix.map((id,i)=>cardHTML(ALLQ[id],'mix',`${i+1} <small style="font-size:13px;color:var(--ink-2)">(${ALLQ[id].topic==='kr1'?'к/р '+ALLQ[id].label:id})</small>`)).join('')}
+  </section>`;
+}
+function render(){
+  renderScore();renderTabs();
+  const t=TOPICS.find(x=>x.id===S.tab);
+  $('#main').innerHTML=S.tab==='mix'?renderMix():t?renderTopic(t):renderKak();
+}
+function refreshCard(card){
+  const ns=card.dataset.ns,id=card.dataset.q,q=ALLQ[id];
+  const label=card.querySelector('.qn').innerHTML;
+  const tmp=document.createElement('div');tmp.innerHTML=cardHTML(q,ns,label);
+  const nc=tmp.firstElementChild;card.replaceWith(nc);
+  renderScore();renderTabs();
+  const eb=document.querySelector('.phead .eyebrow');const t=TOPICS.find(x=>x.id===S.tab);
+  if(eb&&t){eb.textContent=ebText(t,topicStats(t))}
+  if(ns==='mix'){const m=mixStats();const r=$('#mixres span');if(r)r.innerHTML=`С первой попытки: <b>${m.first}</b> из 10 · решено <b>${m.ok}</b>`}
+  return nc;
+}
+function answer(card,correct,wrongIdx){
+  const s=g(card.dataset.ns,card.dataset.q);s.msg=null;
+  if(correct){s.first=s.tries===0&&!s.peek;s.st='ok';s.sol=true}
+  else{s.st='bad';if(wrongIdx!=null)s.wrong=(s.wrong||[]).concat(wrongIdx)}
+  s.tries++;save();
+  const nc=refreshCard(card);
+  if(!correct){const inp=nc.querySelector('[data-inp]');if(inp){inp.focus();inp.select()}}
+}
+function checkNum(card){
+  const q=ALLQ[card.dataset.q];const inp=card.querySelector('[data-inp]');
+  const raw=(inp.value||'').replace(',','.').replace(/[^\d.\-]/g,'');
+  const v=parseFloat(raw);const s=g(card.dataset.ns,q.id);s.val=inp.value;
+  if(raw===''||isNaN(v)){s.msg='nan';save();refreshCard(card).querySelector('[data-inp]').focus();return}
+  answer(card,Math.abs(v-q.ans)<1e-6);
+}
+let resetArm=null;
+document.addEventListener('click',e=>{
+  const tb=e.target.closest('[data-tab]');
+  if(tb){S.tab=tb.dataset.tab;save();render();try{history.replaceState(null,'','#'+S.tab)}catch(_){}window.scrollTo({top:0});return}
+  const b=e.target.closest('[data-act]');if(!b)return;
+  const act=b.dataset.act,card=b.closest('.q');
+  if(act==='pick'){const i=+b.dataset.i;answer(card,i===ALLQ[card.dataset.q].ans,i===ALLQ[card.dataset.q].ans?null:i);return}
+  if(act==='check'){checkNum(card);return}
+  if(act==='hint'||act==='sol'){const s=g(card.dataset.ns,card.dataset.q);s[act]=!s[act];if(act==='sol'&&s.sol&&s.st!=='ok')s.peek=true;save();refreshCard(card);return}
+  if(act==='newmix'){newMix();render();return}
+  if(act==='reset'){
+    if(resetArm!==b){resetArm=b;b.textContent='Нажми ещё раз, чтобы сбросить';setTimeout(()=>{if(resetArm===b){resetArm=null;b.textContent='Сбросить ответы темы'}},3000);return}
+    resetArm=null;const t=TOPICS.find(x=>x.id===b.dataset.topic);t.qs.forEach(q=>delete S.a['main|'+q.id]);save();render();return}
+});
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.matches('[data-inp]')){e.preventDefault();checkNum(e.target.closest('.q'))}});
+document.addEventListener('input',e=>{if(e.target.matches('[data-inp]')){const c=e.target.closest('.q');g(c.dataset.ns,c.dataset.q).val=e.target.value;save()}});
+const h=(location.hash||'').slice(1);if(h&&(h==='kak'||h==='mix'||TOPICS.some(t=>t.id===h)))S.tab=h;
+render();
+</script>
+
+</body>
+</html>
